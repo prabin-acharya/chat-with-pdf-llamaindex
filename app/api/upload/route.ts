@@ -21,7 +21,11 @@ export async function POST(req: NextRequest) {
   const path = join(tmpDirectory, file.name);
   console.log(tmpDirectory, "tmpDirectoryPth");
 
-  await mkdir(tmpDirectory, { recursive: true });
+  try {
+    await mkdir(tmpDirectory, { recursive: true });
+  } catch (error) {
+    console.error("Error creating directory:", error);
+  }
   await writeFile(path, buffer);
 
   console.log(`open ${path}-------------`);
