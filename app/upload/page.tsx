@@ -9,6 +9,10 @@ export default function UploadFile() {
   const [file, setFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [fileId, setFileId] = useState<string | null>(null);
+  const [query, setQuery] = useState<string>();
+  const [answer, setAnswer] = useState<string>("");
+  const [previousQuery, setPreviousQuery] = useState<string>();
+  const [serverFileId, setServerFileId] = useState<string>();
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
@@ -56,6 +60,10 @@ export default function UploadFile() {
         body: data,
       });
 
+      const response = await res.json();
+      console.log(response);
+      setServerFileId(response.file);
+
       if (!res.ok) throw new Error(await res.text());
     } catch (e: any) {
       console.log(e);
@@ -71,10 +79,32 @@ export default function UploadFile() {
     };
   }, []);
 
+  const handleAsk = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/llama", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ query, fileId: serverFileId }),
+      });
+      const data = await response.json();
+      setAnswer(data.response);
+
+      setPreviousQuery(query);
+      setQuery("");
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  // <main className="flex min-h-screen flex-col items-center justify-between p-24">
+
   return (
-    <main className="">
+    <main className="flex py-4 mx-auto border-2 flex-col text-white">
       <div className="flex flex-col justify-center  pt-4 px-60">
-        <h1 className="text-2xl font-bold">Upload Files</h1>
+        <h1 className="text-2xl font-bold">Learning RAG With LlamaIndex</h1>
+        {/* <h1 className="text-2xl font-bold">Upload Files</h1> */}
         <div className="px-2">
           <div
             {...getRootProps()}
@@ -85,12 +115,12 @@ export default function UploadFile() {
               {isDragActive ? (
                 <p>Drop the files here ...</p>
               ) : (
-                <p>Drag & drop files here, or click to select files</p>
+                <p>Drag & drop a here, or click to select file (pdf) </p>
               )}
             </div>
           </div>
 
-          {selectedFile && <h2 className="text-2xl font-bold mb-4">Preview</h2>}
+          {/* {selectedFile && <h2 className="text-2xl font-bold mb-4">Preview</h2>} */}
 
           {selectedFile && (
             <div className="">
@@ -137,6 +167,29 @@ export default function UploadFile() {
               </div>
             </div>
           )}
+
+          <div className=" p-4 pl-8 w-full border-2">
+            <input
+              type="text"
+              placeholder="Ask a question.."
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="w-2/3 outline-none border-gray-700 focus:border text-xl p-2"
+            />
+            <button
+              onClick={handleAsk}
+              className="p-3 bg-sky-700 m-2 rounded-md text-white"
+            >
+              Send
+            </button>
+
+            {answer && (
+              <div>
+                <p>Query: {previousQuery}</p>
+                <p>Answer: {answer}</p>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </main>

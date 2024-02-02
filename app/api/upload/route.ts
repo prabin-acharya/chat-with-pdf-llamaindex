@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
 
   const currentDirectory = process.cwd();
   const tmpDirectory = join("/", "tmp");
-  const fileNamePrefix = file.name.slice(0, 10);
+  const fileNamePrefix = file.name.slice(0, 10).replace(/\s/g, "");
   const uniqueFolderName = `${uuidv4()}_${fileNamePrefix}`;
   const path = join(tmpDirectory, uniqueFolderName, file.name);
   console.log(tmpDirectory, "tmpDirectoryPth", currentDirectory);
