@@ -19,8 +19,11 @@ export async function GET(req: NextRequest) {
     persistDir: "./storage",
   });
 
-  const index = await VectorStoreIndex.fromDocuments(documents, {
-    storageContext,
+  //   const index = await VectorStoreIndex.fromDocuments(documents, {
+  //     storageContext,
+  //   });
+  const loadedIndex = await VectorStoreIndex.init({
+    storageContext: storageContext,
   });
 
   const pipeline = new IngestionPipeline({
@@ -40,11 +43,11 @@ export async function GET(req: NextRequest) {
   // # Save the index to disk
   // index.storage_context.persist(persist_dir="storage")
 
-  index.insertNodes(nodes);
+  loadedIndex.insertNodes(nodes);
 
-  const queryEngine = index.asQueryEngine();
+  const queryEngine = loadedIndex.asQueryEngine();
   const response = await queryEngine.query({
-    query: "What are End-to-end memory networks based on?",
+    query: "What are End-to-end memory networks based on ?",
   });
 
   return NextResponse.json({ success: true, response: response.toString() });
