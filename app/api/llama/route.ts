@@ -17,9 +17,9 @@ export async function POST(req: NextRequest) {
     directoryPath: `/tmp/${fileId}`,
   });
 
-  const storageContext = await storageContextFromDefaults({
-    persistDir: "./storage",
-  });
+  // const storageContext = await storageContextFromDefaults({
+  //   persistDir: "./storage",
+  // });
 
   // const loadedIndex = await VectorStoreIndex.fromDocuments(documents, {
   //   storageContext,
