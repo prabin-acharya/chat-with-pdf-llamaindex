@@ -34,7 +34,7 @@ export default function UploadFile() {
       const data = new FormData();
       data.set("file", acceptedFile);
 
-      const res = await fetch("http://localhost:3000/api/upload", {
+      const res = await fetch("/api/upload", {
         method: "POST",
         body: data,
       });
@@ -63,7 +63,7 @@ export default function UploadFile() {
 
     try {
       setIsLoading(true);
-      const response = await fetch("http://localhost:3000/api/llama", {
+      const response = await fetch("/api/llama", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

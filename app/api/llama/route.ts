@@ -38,9 +38,9 @@ export async function POST(req: NextRequest) {
 
   const nodes = await pipeline.run({ documents });
 
-  for (const node of nodes) {
-    console.log(node.getContent(MetadataMode.NONE));
-  }
+  // for (const node of nodes) {
+  //   console.log(node.getContent(MetadataMode.NONE));
+  // }
 
   // index.insert_nodes(nodes)
   // # Save the index to disk
