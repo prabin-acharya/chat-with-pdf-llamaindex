@@ -19,9 +19,9 @@ export async function POST(req: NextRequest) {
   const buffer = Buffer.from(bytes);
 
   const currentDirectory = process.cwd();
-  const tmpDirectory = join(currentDirectory, "tmp");
+  const tmpDirectory = join("/", "tmp");
   const path = join(tmpDirectory, file.name);
-  console.log(tmpDirectory, "tmpDirectoryPth");
+  console.log(tmpDirectory, "tmpDirectoryPth", currentDirectory);
 
   try {
     await mkdir(tmpDirectory, { recursive: true });
