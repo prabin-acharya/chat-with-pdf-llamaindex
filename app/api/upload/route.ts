@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { join } from "path";
 const { readdir } = require("fs").promises;
 
+export const runtime = "nodejs";
+
 export async function POST(req: NextRequest) {
   console.log("/api/upload================================");
 
