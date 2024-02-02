@@ -47,5 +47,5 @@ export async function POST(req: NextRequest) {
     console.log(file);
   });
 
-  return NextResponse.json({ success: true });
+  return NextResponse.json({ success: true, file: uniqueFolderName });
 }
